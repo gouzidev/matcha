@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}
+    Home
+{% endblock %}
+ 
+{% block loggin %}
+    {% if name %}
+            <div class="nav-block">
+                <form class="nav-link" action="/profile" method="GET">
+                    <button class="" type="submit">profile</button>
+                </form>
+            <form class="nav-link bg-lightpink" action="/logout" method="POST">
+                <button class="" type="submit">logout {{name}}</button>
+            </form>
+
+            </div>
+    {% else %}
+    <div class="nav-block no-space ">
+        <a href="/login" class="nav-link bg-pink">Log in</a>
+        <a href="/signup" class="nav-link last-link bg-lightpink">Sign up</a>
+    </div>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="hero">
+        <div class="hero-wrapper">
+            <h1 class="hero-header">Find Your <span class="text-pink">Real Connections</span></h1>
+            <p class="hero-text">We commited to helping singles find love every day and we are confident in our ability to do so.
+                <span class="brand">matcha</span> matches single women and men for lasting and fulfilling relationships.
+            </p>
+            <button class="join-btn">Join Matcha Now!</button>
+        </div>
+    </div>
+    <div class="features">
+        <div class="feature">
+            <div class="feature-wrapper">
+                <div class="feature-icon">
+                    ICON
+                </div>
+                <div class="feature-name">
+                    Efficient
+                </div>
+                <div class="feature-text">
+                    Thousands of Singles find love through our dating sites each month. Register today to find that special someone on Matcha!
+                </div>
+            </div>
+        </div>
+        <div class="feature">
+            <div class="feature-wrapper">
+                <div class="feature-icon">
+                    ICON
+                </div>
+                <div class="feature-name">
+                    Balance
+                </div>
+                <div class="feature-text">
+                    Thousands of Singles find love through our dating sites each month. Register today to find that special someone on Matcha!
+                </div>
+            </div>   
+        </div>
+        <div class="feature">
+            <div class="feature-wrapper">
+                <div class="feature-icon">
+                    ICON
+                </div>
+                <div class="feature-name">
+                    Smart Blocking
+                </div>
+                <div class="feature-text">
+                    Thousands of Singles find love through our dating sites each month. Register today to find that special someone on Matcha!
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+
+{% block footer %}
+<footer>
+    <div class="footer-section">
+        <a href="#" class="footer-brand">
+            Matcha
+        </a>
+        <div class="footer-nav">
+            <div class="footer-nav-item">
+                Chat
+            </div>
+            <div class="footer-nav-item">
+                Partnership
+            </div>
+            <div class="footer-nav-item">
+                Blog
+            </div>
+        </div>
+        <div class="footer-social">
+            <div class="footer-link">
+                <a href="#" class="fa-brands fa-twitter"></a>
+            </div>
+            <div class="footer-link">
+                <a href="#" class="fa-brands fa-facebook-f"></a>
+            </div>
+            <div class="footer-link">
+                <a href="#" class="fa-brands fa-instagram"></a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        Copyright @ 2024 Matcha platform. All right reserved.
+    </div>
+</footer>
+{% endblock %}

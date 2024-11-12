@@ -1,0 +1,91 @@
+
+.signup-form-wrapper
+{
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    border: 1px solid #1b2727;
+    margin-top: 40px;
+}
+
+main div .form-header
+{
+    font-size: 30px;
+}
+
+
+.signup-form-wrapper form.signup-form
+{
+    height: 70%;
+    font-size: 15px; 
+    width: 780px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+form .form-item
+{
+    width: 400px;
+}
+
+form .form-item
+{
+    display: flex;
+    flex-direction: row;
+}
+
+form .form-item .form-label
+{
+    width: 100px;
+}
+
+form .form-item .form-input-group
+{
+    width: 100%;
+    position: relative;
+}
+
+form .form-item .form-input-group .form-input
+{
+    width: 100%;
+}
+
+form input[type="submit"]
+{
+    background: #FFB4B4;
+    width: 400px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border: 1px solid #1b2727;
+    transition: 0.3s all;
+    margin-top: 2%;
+}
+
+
+
+.login-form-wrapper
+{
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    border: 1px solid #1b2727;
+    margin-top: 40px;
+}
+
+.login-form-wrapper form.login-form
+{
+    height: 70%;
+    font-size: 15px; 
+    width: 780px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+

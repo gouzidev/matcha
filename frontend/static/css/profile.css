@@ -1,0 +1,121 @@
+main
+{
+    width: 1200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-form-wrapper
+{
+    height: 600px;
+    width: 1200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    border: 1px solid #1b2727;
+    margin-top: 40px;
+}
+
+main div .form-header
+{
+    font-size: 30px;
+}
+
+
+.profile-form-wrapper form.profile-form
+{
+    height: 70%;
+    font-size: 15px; 
+    width: 900px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+form .form-item
+{
+    display: flex;
+    width: 800px;
+    flex-direction: row;
+}
+
+form .form-group
+{
+    width: 800px;
+    display: flex;
+    gap: 100px;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+
+form .form-group .form-group-item
+{
+    display: flex;
+    width: 420px;
+    flex-direction: row;
+}
+
+form .form-label
+{
+    width: 150px;
+}
+
+.form-input-group
+{
+    display: flex;
+    flex: 1;
+    align-items: start;
+    gap: 20px;
+    position: relative;
+}
+
+form  .form-input
+{
+    height: 30px;
+    display: flex;
+    flex: 1;
+}
+
+form  textarea.form-input
+{
+    height: 70px;
+}
+
+form .form-input-group:has(.form-radio)
+{
+    display: flex;
+    align-items: start;
+}
+form .form-input-group .radio-group
+{
+    width: 100px;
+}
+
+form input[type="submit"]
+{
+    background: #FFB4B4;
+    width: 200px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border: 1px solid #1b2727;
+    transition: 0.3s all;
+    margin-top: 2%;
+}
+
+.form-input-edit-btn, .form-radio-edit-btn
+{
+    border: 1px solid #1b2727a1;
+    height: 30px;
+    width: 50px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background-color: #E5FAFF;
+}
+
+input:read-only:not(.profile-save-btn), textarea:read-only
+{
+    opacity: 0.5;
+}

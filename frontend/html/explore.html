@@ -1,0 +1,12 @@
+{% extends "index.html" %}
+{% block title%}
+    Explore
+{% endblock %} 
+
+{% block content %}
+    <main class="explore">
+        {% for user in users %}
+            <div class="chat-user">{{user.name}}</div>
+        {% endfor %}
+    </main>
+{% endblock %}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block links %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {% endblock %}
+    <title>
+        {% block title %}
+            Matcha
+        {% endblock %}
+    </title>
+</head>
+<body>
+    {% block nav %}
+        <nav class="navbar no-space ">
+                <!-- Left Column: Home and About -->
+                <div class="nav-block no-space ">
+                    <a href="/" class="nav-link first-link">Home</a>
+                    <a href="/explore" class="nav-link">Explore</a>
+                    <a href="/chat" class="nav-link">Chat</a>
+                </div>
+                
+                <!-- Center Column: Matcha -->
+                <div class="nav-block no-space ">
+                    <a id="brand" href="/" class="nav-link brand text-pink">Matcha</a>
+                </div>
+                
+                <!-- Right Column: Login and Signup -->
+                {% block loggin %}
+                    <div class="nav-block no-space ">
+                        <a href="/login" class="nav-link bg-pink">Log in</a>
+                        <a href="/signup" class="nav-link last-link bg-lightpink">Sign up</a>
+                    </div>
+                {% endblock %}
+        </nav>
+    {% endblock %}
+    
+    {% block content %}
+        <div class="container mt-4">
+            this is just a base page
+        </div>
+        {% endblock %}
+
+    {% block footer %}
+    {% endblock %}
+    
+    {% block scripts %}
+        
+    {% endblock %}
+</body>
+</html>

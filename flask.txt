@@ -1,0 +1,350 @@
+flask is a backend web dev framework
+
+you have sign in built in in flask unlike django
+
+simple minimalistic
+
+usally, we create a venv because you get to have an isolated project
+     where you only have packages releavent to this project
+->  python -m venv .venv   # .venv is the name
+->  source ./.venv/bin/activate  # activates the venv 
+
+pip3 install flask # installing flask
+
+pip3 freeze # gets the packages of the venv (flask + deps)
+
+pip3 freeze > requirements.txt # adds the req to a file for other users to install
+
+pip3 install -r requirements.txt # downloads the requirements (from: "pip3 freeze")
+
+
+basic app:
+    from flask import Flask
+
+    app = Flask(__name__) # create the app
+
+
+    @app.route("/")  # adding routes
+    def index():
+        return "Home Page" #html code/page
+
+    @app.route("/about")
+    def about():
+        return "About us : (2024 - Copyright)"
+
+    @app.route("/home/<name>")
+    def home(name):
+        return "hello " + name
+    
+    @app.route("/add/<int:n1>/<int:n2>") #specify type
+    def add(n1, n2):
+        return f"result is {n1 + n2}"
+
+    app.run(host="127.0.0.1", port=5450, debug=True) #running the site
+
+
+to use url params we need to import request from flask
+and use it like this :
+    @app.route("/greet")
+    def greet():
+        name = request.args.get("name")
+        if name:
+            return f"welcome our deer user {name}"
+        else:
+            return "unnamed users arent allwed!"
+if we type 127.0.0.1/greet?name=salah
+we will get the "welcome ... salah" as a result
+
+specify a method(s) for a route:
+    @app.route("/greet", methods=["GET", "POST])
+test a method in terminal:
+    curl  http://127.0.0.1:5555/greet\?name\=salah #GET by dfl
+    curl -X POST http://127.0.0.1:5555/greet\?name\=salah #POST
+    # welcome our deer user salah
+
+if we want to handle more than one request we can do this:
+    @app.route("/handle", methods=["GET", "POST"])
+    def handle():
+        if request.method == "GET":
+            return "Page content ...."
+        elif request.method == "POST":
+            return "Handling params ... "
+➜  ~ curl -X GET http://127.0.0.1:5555/handle
+Page content ....%
+➜  ~ curl -X POST http://127.0.0.1:5555/handle\?name\=salah
+Handling params ... %                                                           ➜  ~ 
+
+returning status codes (and req header):
+    @app.route("/handle", methods=["GET", "POST"])
+    def handle():
+        if request.method == "GET":
+            return "Page content ...."
+        elif request.method == "POST":
+            return "Handling params ... ", 201
+➜  ~ curl -X POST -I http://127.0.0.1:5555/handle
+HTTP/1.1 201 CREATED
+Server: Werkzeug/3.1.0 Python/3.10.12
+Date: Fri, 01 Nov 2024 10:26:46 GMT
+Content-Type: text/html; charset=utf-8
+Content-Length: 20
+Connection: close
+➜  ~ 
+
+making a response
+we first must import it from Flask:
+    from flask import Flask, request, make_response
+    ...
+    @app.route("/handle", methods=["GET", "POST"])
+    def handle():
+        if request.method == "GET":
+            res = make_response("handled !") # the content here
+            res.status_code = 201
+            res.content_type = "text/html"
+            res.set_cookie("name", "amine")
+            return res
+
+➜  ~ curl -I -X GET http://127.0.0.1:5555/handle
+HTTP/1.1 201 CREATED
+Server: Werkzeug/3.1.0 Python/3.10.12
+Date: Fri, 01 Nov 2024 10:40:49 GMT
+Content-Type: text/html
+Set-Cookie: name=amine; Path=/
+Content-Length: 0
+Connection: close
+
+
+rendering html:
+to render html we need to add this code :
+    app = Flask(__name__, template_folder="../frontend") # create the app and add the template folder url 
+    @app.route("/")  # adding route but with html code
+    def index():
+        return render_template("home.html") # html page
+
+
+jinja variables :
+backend
+    @app.route("/")  # adding routes
+    def index():
+        return render_template("home.html", user="salah") #passing user as "salah"
+
+frontend
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Home</title>
+    </head>
+    <body>
+        welcome to home!
+        {{ user }} 
+    </body>
+    </html>
+
+
+jinja for loop and if:
+backend
+    @app.route("/lucky")
+    def index():
+        user_lucky = [19, 42, 1337]
+        return render_template("home.html", lucky_list=user_lucky) #passing user as "salah"
+
+frontend
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Home</title>
+    </head>
+    <body>
+        your lucky list is
+        <ul>
+            {% for luck_n in lucky_list %}
+                {% if luck_n == 1337%}
+                    <li>damn you got the best number: {{ luck_n }}</li>
+                {% else %}
+                    <li>great number: {{ luck_n }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </body>
+    </html>
+
+
+we can use templating to avoid writing repetitive code
+by using a base file and inheriting it
+
+base.html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            {% block title %}
+            {% endblock %}
+        </title>
+    </head>
+    <body>
+        {% block nav %}
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+        {% endblock %}
+        
+        {% block content %}
+            this is just a base page default content
+        {% endblock %}
+    </body>
+    </html>
+
+home.html:
+    {% extends "base.html" %}
+    {% block title%}
+        Home
+    {% endblock %} 
+
+
+
+filters:
+    {{ name | upper }} # gets the upper verison
+# length, first, last, pprint, reverse, string, trim, upper
+# lower, abs, capitalize, default("default value here") ...
+
+we can even write our own filter:
+
+backend:
+    @app.template_filter("reverse_str")
+    def reverse_str(s)
+        return s[::-1]
+
+frontend:
+    {{ name | reverse_str}} # reverses the string
+
+dynamic link in front end
+    <a href="{{ url_for('about') }}">About</a> # we insert fnc name
+backend:
+@app.route("/whatever_here")
+def about():
+    return "About us : (2024 - Copyright)"
+
+
+redirection:
+    import redirect, url_for from Flask
+
+    @app.route("/")
+    def home():
+        return render_template("home.html")
+    @app.route("/redirection_idk")
+    def redirect_to_home():
+        return redirect(url_for("home"))
+or pass in the route
+    @app.route("/redirect_home")
+    def redirect_to_home():
+        return redirect("/")
+
+form handling + dummy login:
+frontend:
+    {% extends "base.html" %}
+
+    {% block title %}
+        login
+    {% endblock %}
+
+    {% block content %}
+    <form method="POST" action="/login">
+        email : 
+        <input type="text" name="email" /> <br/>
+        password:
+        <input type="password" name="password" /> <br/>
+        <input type="submit" value="login" /> <br/>
+    </form>
+    {% endblock %}
+
+backend:
+    @app.route("/login", methods=["GET", "POST"])
+    def login():
+        if request.method == "GET":
+            return render_template("login.html")
+        elif request.method == "POST":
+            email = request.form.get("email")
+            password = request.form.get("password")
+            if password == "123" and email == "s@gmail.com":
+                return "SUCCESS"
+            else:
+                return "FAILURE"
+
+
+uploading a file
+frontend:
+    <form method="POST" action="/upload" enctype="multipart/form-data">
+    <input type="file" value="upload stuff" name="my_data_file"/>
+    <input type="submit" value="done" />
+    </form>
+
+backend:
+    @app.route("/upload", methods=["POST", "GET"])
+    def upload():
+        if request.method == "GET":
+            return render_template("upload.html")
+        elif request.method == "POST":
+            file = request.files["my_data_file"]
+            file.save("../storage/" + file.filename)
+
+download:
+backend:
+    @app.route("/download/<filename>")
+    def download(filename):
+        print("damn:   ", {filename})
+        return send_from_directory("storage", filename, download_name="result.pdf")
+
+
+
+    @app.route("/upload", methods=["POST", "GET"])
+    def upload():
+        if request.method == "GET":
+            return render_template("upload.html")
+        file = request.files["f"]
+        
+        print("file is   ", file.filename)
+        file .save(f"storage/{file.filename}")
+        return render_template("download.html", filename=file.filename, download_name="result.pdf")
+
+
+static files (imgs, css, js ..)
+    app = Flask(__name__, template_folder="templates", static_folder="storage", static_url_path="/") 
+# looks for the storage folder, and starts from its root
+
+    <img src="/img/i.jpeg" />   #  will look in storage for img folder
+
+    <h1 class=".myheader">im a header</h1>  # will look for .myheader in css files in storage
+
+to set bootstrap up, copy the js and css to the according folder
+and link them up and it works 
+<link rel=.... href="/css/bootstrap.css"> # but css must be in storage
+
+
+session management:
+
+    from flask import session
+    app.secret_key = "secret"
+    @app.route('/set_data')
+    def set_data():
+        session['name'] = "salah" # now salah is signuped in the session
+
+    @app.route('/get_data')
+    def get_data():
+        username = session.get("name")
+        if username:
+            return render_template("index.html", name=username)
+        else:
+            session.clear()
+            return redirect("login.html")
+
+cookies:
+    set_cookie("name", "val")
+    
+    set_cookie("name", expires=0) # removes cookie
+
+    request.cookies.get("name")
+
