@@ -82,7 +82,8 @@
                         </label>
                         {% if user.profile_pic %}
                             <a href="/profile/picture/{{user.id}}" class="form-input-edit-btn show-img-btn">show</a>
-                            {# <button type="button" class="form-input-edit-btn">show</button>
+                             <div class="form-input-edit-btn show-delete-popup-btn">delete</div>
+                             {# <button type="button" class="form-input-edit-btn">show</button>
                             <button type="button" class="form-input-edit-btn">delete</button> #}
                             {% else %}
                             <!-- <form class="add-img-form" method="POST" action="/profile/picture/{{user.id}}"> -->
@@ -118,6 +119,15 @@
                 </div>
                 <input type="submit" class="profile-save-btn" value="SAVE INFO"/>
             </form>
+            <div class="popup-modal">
+                <div class="delete-picture-popup">
+                  <div class="delete-confirm-text">are you sure you want to delete your profile picture, this action is irreversible </div>
+                  <div class="popup-btns">
+                    <button type="submit" class="delete-profile-pic-confirm-btn">confirm</button>
+                    <button type="reset" class="cancel-delete-profile-pic-btn">cancel</button>
+                  </div>
+                </div>
+            </div>
         </div>
     </main>
     {% block scripts %}

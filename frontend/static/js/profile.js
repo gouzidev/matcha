@@ -38,20 +38,34 @@ document.getElementById("female").addEventListener("change", (e) => {
 });
 
 
-// document.addEventListener("DOMContentLoaded", () => {
-//     let show_img_btn = document.querySelector(".show-img-btn");
+let show_delete_popup_img_btn = document.querySelector(".show-delete-popup-btn");
 
-//     show_img_btn.addEventListener("click", (e) => {
-//         e.preventDefault();
-//         fetch(`/profile/picture/${user.id}`, {
-//             method: "GET"
-//         })
-//         .then(res => res.text())
-//         .then(html => {
-//             // Open a new window or tab to display the image
-//             let newWindow = window.open();
-//             newWindow.document.write(html);
-//         })
-//         .catch(err => console.error(err));
-//     });
-// });
+show_delete_popup_img_btn.addEventListener("click", (e) => {
+    const popup_model = document.querySelector(".popup-modal")
+    popup_model.style.display = "inherit"
+});
+
+let undo_confirm_btn = document.querySelector(".cancel-delete-profile-pic-btn");
+
+undo_confirm_btn.addEventListener("click", (e) => {
+    const popup_model = document.querySelector(".popup-modal")
+    popup_model.style.display = "none"
+    e.preventDefault();
+});
+
+
+
+let delete_img_btn = document.querySelector(".delete-profile-pic-confirm-btn");
+
+delete_img_btn.addEventListener("click", (e) => {
+    const popup_model = document.querySelector(".popup-modal")
+    popup_model.style.display = "none"
+    fetch(`/profile/picture/${user.id}`, 
+        {method : "DELETE"}
+    ).then(res => {
+        console.log(res.text())
+        window.location.reload()
+    }
+    ).catch(err => {
+        console.error(err)})
+});

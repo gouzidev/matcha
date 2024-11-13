@@ -1,9 +1,11 @@
 
 from flask import Flask, flash
-from flask import session
+from flask import session, send_from_directory
 from flask import render_template, request, make_response, redirect
-import db
+import db, utils
+from os import path, unlink, rmdir
 from flask_bcrypt import Bcrypt
+
 
 app = Flask(__name__, static_folder="../frontend/static",
              template_folder="../frontend/html", 
@@ -11,7 +13,7 @@ app = Flask(__name__, static_folder="../frontend/static",
 
 app.secret_key = "secret"
 
-# app["UPLOAD_FOLDER"] = "./public/images"
+app.config["UPLOAD_FOLDER"] = "../frontend/static/img"
 
 bcrypt = Bcrypt(app)
 
@@ -42,24 +44,13 @@ def show_signup_page():
 @app.route("/signup", methods=["POST"])
 def signup():
     name = request.form.get("name")
-    if not name:
-        flash("please enter a valid name", "error")
-        return redirect("/signup")
     email = request.form.get("email")
-    if not email:
-        flash("please enter a valid email", "error")
-        return redirect("/signup")
     passw = request.form.get("passw")
-    if not passw:
-        flash("please enter a valid password", "error")
-        return redirect("/signup")
-    if len(passw) < 8:
-        flash("password must be at least 8 characters", "error")
-        return redirect("/signup")
     gender = request.form.get("gender")
-    if not gender:
-        flash("please select your gender", "error")
-        return redirect("/signup")
+
+    verified = utils.verify_form_data(name, email, passw, gender)
+    if not verified:
+        return redirect("/profile")
     conn = db.connect()
     curs = conn.cursor()
 
@@ -125,12 +116,6 @@ def show_chat_page():
     else:
         return render_template("login.html")
 
-def verify_ext(name):
-    name_parts = name.split(".")
-    allowed_exts = ["jpeg", "png"]
-    if name_parts[-1] not in allowed_exts:
-        return False
-    return True
 
 @app.route("/profile", methods=["GET"])
 def show_profile_page():
@@ -143,6 +128,7 @@ def show_profile_page():
     user["age"] = user_data["age"]
     user["bio"] = user_data["bio"]
     user["gender"] = user_data["gender"]
+    user["profile_pic"] = user_data["profile_pic"]
     if not user_id or not user:
         return redirect("/login")
     session["name"] = user["name"]
@@ -165,13 +151,13 @@ def profile():
     newpassw = request.form.get("newpassw")
     oldpassw = request.form.get("oldpassw")
     profile_pic = request.files.get("profile_pic")
-    profile_pic_path = None
     # profile_pic.name
-    pic_name = profile_pic.filename
-    if verify_ext(pic_name):
-        profile_pic_path = f"/home/gouzi/Desktop/code 💻/web/matcha/frontend/static/img/"
-        profile_pic.save(profile_pic_path + str(user_id))
-
+    if profile_pic:
+        pic_name = utils.handle_img(app, user_id, profile_pic)
+        if pic_name == None:
+            return redirect("/profile")
+    else:
+        pic_name = None
     if not age:
         age = 0
     else:
@@ -193,9 +179,9 @@ def profile():
         return redirect("/profile")
     conn = db.connect()
     curs = conn.cursor()
+    user = db.get_user_data(user_id)
 
     if oldpassw:
-        user = db.get_user_data(user_id)
         if bcrypt.check_password_hash(user["password"], oldpassw):
             if oldpassw == newpassw:
                 flash("new password can't be the same as the old", "error")
@@ -203,7 +189,10 @@ def profile():
                 flash("new password must be 8 characters at least", "error")
                 return redirect("/profile")
             hashed = bcrypt.generate_password_hash(newpassw).decode('utf-8')
-            curs.execute("UPDATE users SET name = %s, age = %s, email = %s, password = %s, bio = %s, gender = %s, profile_pic = %s WHERE id=%s", [name, age, email, hashed, bio, gender, profile_pic_path ,user_id])
+            if profile_pic:
+                curs.execute("UPDATE users SET name = %s, age = %s, email = %s, password = %s, bio = %s, gender = %s, profile_pic = %s WHERE id=%s", [name, age, email, hashed, bio, gender, pic_name ,user_id])
+            else:
+                curs.execute("UPDATE users SET name = %s, age = %s, email = %s, password = %s, bio = %s, gender = %s WHERE id=%s", [name, age, email, hashed, bio, gender ,user_id])
             conn.commit()
             flash("password updated successfully", "success")
             return redirect("/profile")
@@ -211,7 +200,10 @@ def profile():
             flash("wrong password", "error")
             return redirect("/profile")
     
-    curs.execute("UPDATE users SET name = %s, age = %s, email = %s, bio = %s, gender = %s , profile_pic = %s WHERE id=%s", [name, age, email, bio, gender, profile_pic_path, user_id])
+    if profile_pic:
+        curs.execute("UPDATE users SET name = %s, age = %s, email = %s, bio = %s, gender = %s , profile_pic = %s WHERE id=%s", [name, age, email, bio, gender, pic_name, user_id])
+    else:
+        curs.execute("UPDATE users SET name = %s, age = %s, email = %s, bio = %s, gender = %s WHERE id=%s", [name, age, email, bio, gender, user_id])
     conn.commit()
     flash("profile updated successfully", "success")
 
@@ -227,9 +219,39 @@ def show_profile_pic(user_id):
     print(user_data)
     profile_pic_path = user_data["profile_pic"]
     if profile_pic_path:
-        return render_template("profile_pic.html", img_path=profile_pic_path)
+        return send_from_directory(path.join(app.config["UPLOAD_FOLDER"], str(user_id)), profile_pic_path)
     else:
         return render_template("profile_pic.html", img_path="http://192.168.1.110:5000/img/default.webp")
+
+
+@app.route("/profile/picture/<int:user_id>", methods=["DELETE"])
+def delete_profile_pic(user_id):
+    id = session.get("user_id")
+    if id != user_id:
+        flash("error deleting your image", "error")
+        return redirect("/profile")
+    user_data = db.get_user_data(user_id)
+    profile_pic_name = user_data["profile_pic"]
+    
+    if profile_pic_name:
+        conn = db.connect()
+        curs = conn.cursor()
+        curs.execute("UPDATE users SET profile_pic = %s WHERE id=%s", [None, user_id])
+        conn.commit()
+        if path.exists((path.join(app.config["UPLOAD_FOLDER"], str(user_id), profile_pic_name))):
+            unlink(path.join(app.config["UPLOAD_FOLDER"], str(user_id), profile_pic_name))
+        else:
+            flash("error deleting your image", "error")
+            return redirect("/profile")
+        if path.exists(path.join(app.config["UPLOAD_FOLDER"], str(user_id))):
+            rmdir(path.join(app.config["UPLOAD_FOLDER"], str(user_id)))
+        else:
+            flash("error deleting your image", "error")
+            return redirect("/profile")
+        flash("deleted image successfully", "success")
+    else:
+        flash("error deleting your image (add one first)", "error")
+    return redirect("/profile")
 
 
 # app.run(host="127.0.0.1", port=5000, debug=True)
