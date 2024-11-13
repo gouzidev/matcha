@@ -6,10 +6,8 @@
 
 /* 2. Remove default margin */
 * {
-    font-family: monospace;
     margin: 0;
     padding: 0;
-
 }
 
 body {
@@ -48,6 +46,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .navbar
 {
+    font-family: monospace;
     height: 80px;
     display: flex;
     flex-direction: row;
@@ -148,6 +147,7 @@ body main .hero
     justify-content: center;
     width: 100%;
     height: 400px;
+    font-family: monospace;
 }
 
 body main .hero .hero-wrapper
@@ -196,6 +196,7 @@ main .features
     align-items: center;
     justify-content: center;
     width: 100%;
+    font-family: monospace;
 }
 
 main .features .feature
@@ -277,6 +278,7 @@ footer
     justify-content: space-between;
     padding: 25px;
     margin-top: 150px;
+    font-family: monospace;
 }
 
 footer .footer-section

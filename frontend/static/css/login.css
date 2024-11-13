@@ -8,6 +8,7 @@
     align-items: center;
     border: 1px solid #1b2727;
     margin-top: 40px;
+    font-family: monospace;
 }
 
 main div .form-header
@@ -76,6 +77,8 @@ form input[type="submit"]
     align-items: center;
     border: 1px solid #1b2727;
     margin-top: 40px;
+    font-family: monospace;
+
 }
 
 .login-form-wrapper form.login-form

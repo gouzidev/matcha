@@ -20,9 +20,6 @@ def delete_files_in_directory(directory_path):
    except OSError:
      print("Error occurred while deleting files.")
 
-# Usage
-directory_path = '/path/to/directory'
-delete_files_in_directory(directory_path)
 
 def handle_img(app, user_id, profile_pic):
     if not profile_pic:
@@ -60,3 +57,17 @@ def verify_form_data(name, email, passw, gender):
             flash("please select your gender", "error")
             return False
         return True
+
+def get_users_full_pic_path(imgs_dir, users):
+    for user in users:
+        pic = user["profile_pic"]
+        id = user["id"]
+        full_path = path.join(imgs_dir, str(id), pic)
+        user["profile_pic"] = full_path
+    return users
+
+def filter_users_data(users):
+    for user in users:
+        user.pop("fame")
+    return users
+

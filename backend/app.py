@@ -17,6 +17,15 @@ app.config["UPLOAD_FOLDER"] = "../frontend/static/img"
 
 bcrypt = Bcrypt(app)
 
+@app.template_filter("first_4_words")
+def first_4_words(s):
+    words = s.split()
+    first_4 = ' '.join(words[:4])
+    if len(words) > 4:
+        return first_4 + "..."
+    else:
+        return first_4
+
 @app.route("/", methods=["GET"])
 def index():
     name = session.get("name")
@@ -24,16 +33,6 @@ def index():
     if name and email:
         return render_template("index.html", email=email, name=name)
     return render_template("index.html")
-
-@app.route("/explore", methods=["GET"])
-def explore():
-    users = db.get_users(-1)
-    users.sort(key=lambda user: user['fame'], reverse=True)
-    name = session.get("name")
-    email = session.get("email")
-    if name and email:
-        return render_template("explore.html", users=users, email=email, name=name)
-    return render_template("explore.html")
 
 @app.route("/signup", methods=["GET"])
 def show_signup_page():
@@ -221,7 +220,7 @@ def show_profile_pic(user_id):
     if profile_pic_path:
         return send_from_directory(path.join(app.config["UPLOAD_FOLDER"], str(user_id)), profile_pic_path)
     else:
-        return render_template("profile_pic.html", img_path="http://192.168.1.110:5000/img/default.webp")
+        return render_template("profile_pic.html", img_path="http:///127.0.0.1:5000/img/default.webp")
 
 
 @app.route("/profile/picture/<int:user_id>", methods=["DELETE"])
@@ -252,6 +251,20 @@ def delete_profile_pic(user_id):
     else:
         flash("error deleting your image (add one first)", "error")
     return redirect("/profile")
+
+@app.route("/explore", methods=["GET"])
+def explore():
+    user_id = session.get("user_id") or -1
+
+    users = db.get_users(user_id)
+    users = utils.get_users_full_pic_path("img", users)
+    users.sort(key=lambda user: user['fame'], reverse=True)
+    users = utils.filter_users_data(users)
+    name = session.get("name")
+    email = session.get("email")
+    if name and email:
+        return render_template("explore.html", users=users, email=email, name=name)
+    return render_template("explore.html")
 
 
 # app.run(host="127.0.0.1", port=5000, debug=True)

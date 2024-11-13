@@ -16,6 +16,7 @@ main
     align-items: center;
     border: 1px solid #1b2727;
     margin-top: 40px;
+    font-family: monospace;
 }
 
 main div .form-header
