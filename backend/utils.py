@@ -66,6 +66,13 @@ def get_users_full_pic_path(imgs_dir, users):
         user["profile_pic"] = full_path
     return users
 
+def get_user_full_pic_path(imgs_dir, user):
+    pic = user["profile_pic"]
+    id = user["id"]
+    full_path = path.join(imgs_dir, str(id), pic)
+    user["profile_pic"] = full_path
+    return user
+
 def filter_users_data(users):
     for user in users:
         user.pop("fame")
