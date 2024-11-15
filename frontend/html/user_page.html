@@ -1,0 +1,53 @@
+{% extends "index.html" %}
+{% block title%}
+    Explore
+{% endblock %} 
+{% block links %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/explore.css') }}" />
+  <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+{% endblock %}
+{% block content %}
+    <main class="explore">
+        <div class="cards-container">
+            <div class="user-card" data-user-id="{{user.id}}">
+              <img src="http:///127.0.0.1:5000/{{user.profile_pic}}"/>
+              <div class="card-layer"></div>
+              <div class="user-content">
+                <div class="name-age-group">
+                  <div class="user-name">{{user.name | title}}</div>
+                  <div class="user-age">{{user.age}}</div>
+                </div>
+                <div class="user-status">
+                  <div class="active-use-icon"></div>
+                  <div class="active-text">active</div>
+                </div>
+                <div class="user-bio">
+                  {{user.bio | first_4_words}}
+                </div>
+                <div class="card-btns">
+                  <form action="" method="POST">
+                      <button type="submit">
+                        <i class="fa-regular fa-heart"></i>
+                      </button>
+                  </form>
+                  <form action="" method="POST">
+                    <button type="submit">
+                      <i class="fa-regular fa-comment"></i>
+                    </button>
+                </form>
+                </div>
+              </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block scripts %}
+    <script src="js/explore.js"></script>
+{% endblock %}

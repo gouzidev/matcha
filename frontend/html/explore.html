@@ -14,15 +14,25 @@
 {% endblock %}
 {% block content %}
     <main class="explore">
+        <div class="msg">
+          {% with messages = get_flashed_messages(with_categories=True) %}
+              {% if messages %}
+                  <div class="{{messages[-1][0]}}">
+                  {% set last_message = messages[-1][1] %}
+                    <div class="{{messages[-1][0]}}-msg"> {{ last_message }}</div>
+                  </div>
+                {% endif %}
+          {% endwith %}
+        </div>
         <div class="cards-container">
           {% for user in users %}
-              <div class="user-card">
+              <div class="user-card" data-user-id="{{user.id}}">
                 <img src="http:///127.0.0.1:5000/{{user.profile_pic}}"/>
                 <div class="card-layer"></div>
                 <div class="user-content">
                   <div class="name-age-group">
                     <div class="user-name">{{user.name | title}}</div>
-                    <div class="user-age">{{user.age}}</div>
+                    <div class="user-age">{% if user.age != 0 %}{{user.age}}{% endif %}</div>
                   </div>
                   <div class="user-status">
                     <div class="active-use-icon"></div>
@@ -32,12 +42,30 @@
                     {{user.bio | first_4_words}}
                   </div>
                   <div class="card-btns">
-                    <i class="fa-regular fa-heart"></i>
-                    <i class="fa-regular fa-comment"></i>
+                    <form action="/like/{{user.id}}" method="POST">
+                      {% if user.liked %}
+                        <button type="submit">
+                          <i class="card-btn card-heart-btn fa-solid fa-heart"></i>
+                        </button>  
+                      {% else %}
+                        <button type="submit">
+                          <i class="card-btn card-heart-btn fa-regular fa-heart"></i>
+                        </button>  
+                        {% endif %}
+                    </form>
+                    <form action="/chat/{{user.id}}" method="POST">
+                      <button type="submit">
+                        <i class="card-btn card-chat-btn fa-regular fa-comment"></i>
+                      </button>  
+                    </form>
                   </div>
                 </div>
               </div>
           {% endfor %}
         </div>
     </main>
+{% endblock %}
+
+{% block scripts %}
+    <script src="js/explore.js"></script>
 {% endblock %}

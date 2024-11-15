@@ -6,13 +6,13 @@ main
     align-items: center;
 }
 
-.profile-form-wrapper
+.user-form-wrapper
 {
-    height: 600px;
+    height: 700px;
     width: 1200px;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-evenly;
     align-items: center;
     border: 1px solid #1b2727;
     margin-top: 40px;
@@ -21,14 +21,14 @@ main
 
 main div .form-header
 {
-    font-size: 30px;
+    font-size: 27px;
 }
 
 
-.profile-form-wrapper form.profile-form
+.user-form-wrapper form.user-form
 {
-    height: 70%;
-    font-size: 15px; 
+    height: 80%;
+    font-size: 14px; 
     width: 900px;
     display: flex;
     flex-direction: column;
@@ -60,6 +60,11 @@ form .form-group .form-group-item
     flex-direction: row;
 }
 
+form .form-group .form-group-item.gender-form-group
+{
+    gap: 20px;
+
+}
 form .form-label
 {
     width: 150px;
@@ -74,14 +79,14 @@ form .form-label
     position: relative;
 }
 
-form  .form-input
+form  .form-input:not(.tag-input)
 {
     height: 30px;
     display: flex;
     flex: 1;
 }
 
-form  textarea.form-input
+form  textarea.form-input:not(.tag-input)
 {
     height: 70px;
 }
@@ -107,6 +112,15 @@ form input[type="submit"]
     margin-top: 2%;
 }
 
+.add-tag-btn
+{
+    border: 1px solid #1b2727a1;
+    height: 30px;
+    width: 80px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background-color: #b4ffb8;
+}
+
 .form-input-edit-btn, .form-radio-edit-btn
 {
     border: 1px solid #1b2727a1;
@@ -116,9 +130,44 @@ form input[type="submit"]
     background-color: #E5FAFF;
 }
 
-input:read-only:not(.profile-save-btn), textarea:read-only
+input:read-only:not(.user-save-btn), textarea:read-only
 {
     opacity: 0.5;
+}
+
+form  .form-input.tag-input
+{
+    width: 100px;
+}
+
+.pic-btns
+{
+    display: flex;
+    flex-direction: row;
+    column-gap: 10px;
+}
+
+.profile-btn
+{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    border: 0.5px solid #1b2727;
+    text-decoration: none;
+    color: black;
+    transition: 0.3s all;
+    cursor: pointer;
+}
+
+.profile-btn.show-img-btn
+{
+    background-color: rgb(218, 167, 64);
+}
+
+.show-delete-popup-btn
+{
+    background: #ff3c3c;
 }
 
 .popup-modal
@@ -146,6 +195,7 @@ input:read-only:not(.profile-save-btn), textarea:read-only
     display: flex;
     flex-direction: column;
     align-items: center;
+    border-radius: 20px;
 }  
 
 .popup-modal .delete-picture-popup .delete-confirm-text
@@ -154,6 +204,7 @@ input:read-only:not(.profile-save-btn), textarea:read-only
     font-weight: 600;
     text-align: start;
     height: 60%;
+    width: 80%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -169,7 +220,7 @@ input:read-only:not(.profile-save-btn), textarea:read-only
     width: 80%;
 }
 
-.popup-modal .delete-picture-popup .delete-profile-pic-confirm-btn
+.popup-modal .delete-picture-popup .delete-user-pic-confirm-btn
 {
     background-color: #ff2d2d;
     color: white;
@@ -181,7 +232,7 @@ input:read-only:not(.profile-save-btn), textarea:read-only
     margin-top: 2%;   
 }
 
-.popup-modal .delete-picture-popup .cancel-delete-profile-pic-btn
+.popup-modal .delete-picture-popup .cancel-delete-user-pic-btn
 {
     background-color: #575757;
     color: white;
@@ -192,4 +243,55 @@ input:read-only:not(.profile-save-btn), textarea:read-only
     transition: 0.3s all;
     margin-top: 2%;
     
+}
+
+div.form-item.tags-form-group
+{
+    display: flex;
+    gap: 20px;
+}
+
+.tags-wrapper
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 50px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: 1px solid #1b272767;
+    box-shadow: rgba(10, 10, 10, 0.109) 0px 1px 4px 1px;
+}
+
+.tags-container
+{
+    display: flex;
+    flex-wrap: wrap;
+    width: 95%;
+    min-height: 80%;
+    gap: 10px;
+}
+
+.tag-item
+{
+    padding-left: 5px;
+    padding-right: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid #FFB4B4;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+
+}
+
+.tag-item .tag-delete-icon
+{
+    cursor: pointer;
+    transition: 0.3s all;
+    margin-left: 5px;
+}
+
+.tag-item .tag-delete-icon:hover
+{
 }

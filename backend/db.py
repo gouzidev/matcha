@@ -75,6 +75,15 @@ def get_user_data(id):
     user["id"] = row[7]
     return user
 
+
+
+def get_friends(likes):
+    friends = []
+    for liked, was_liked in likes:
+        friend = get_user_data(was_liked)
+        friends.append(friend)
+    return friends
+
 def check_user_exists(fieldname, fielddata):
     conn = connect()
     curs = conn.cursor()

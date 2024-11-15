@@ -130,7 +130,6 @@ def init_user(app):
 
     @app.route("/user/<int:user_id>", methods=["GET"])
     def show_user_page(user_id):
-        print(user_id)
         user_data = db.get_user_data(user_id)
         tags = db.get_user_tags(user_id)
         user = {}
@@ -154,7 +153,6 @@ def init_user(app):
     def show_profile_pic(user_id):
         # user_id = session.get("user_id")
         user_data = db.get_user_data(user_id)
-        print(user_data)
         profile_pic_path = user_data["profile_pic"]
         if profile_pic_path:
             return send_from_directory(path.join(app.config["UPLOAD_FOLDER"], str(user_id)), profile_pic_path)
@@ -210,11 +208,9 @@ def init_user(app):
         flash("tag is deleted successfully", "success")
         return jsonify({"success": True, "message": "Tag deleted successfully."}), 200
 
-    @app.route("/like/<int:liked_id>", methods=["POST"])
-    def post_like(liked_id):
+    @app.route("/like/<int:target_id>", methods=["POST"])
+    def post_like(target_id):
         user_id = session.get("user_id")
-        print(user_id)
-        print(liked_id)
         logged = session.get("logged")
         if not user_id or not logged:
             flash("please log in to like someone!", "error")
@@ -222,13 +218,81 @@ def init_user(app):
         conn = db.connect()
         curs = conn.cursor()
 
-        curs.execute("SELECT liked, was_liked FROM likes WHERE liked = %s AND was_liked = %s", [user_id, liked_id])
+        curs.execute("SELECT liked, was_liked FROM likes WHERE liked = %s AND was_liked = %s", [user_id, target_id])
         row = curs.fetchall()
         if row:
-            curs.execute("DELETE FROM likes WHERE liked = %s AND was_liked = %s", [user_id, liked_id])
+            curs.execute("DELETE FROM likes WHERE liked = %s AND was_liked = %s", [user_id, target_id])
             flash("unliked successfully!", "success")
         else:
-            curs.execute("INSERT INTO likes (liked, was_liked) VALUES (%s, %s)", [user_id, liked_id])
+            curs.execute("INSERT INTO likes (liked, was_liked) VALUES (%s, %s)", [user_id, target_id])
             flash("liked successfully!", "success")
         conn.commit()
         return redirect("/explore")
+
+    @app.route("/chat/<int:target_id>", methods=["POST"])
+    def chat(target_id):
+        user_id = session.get("user_id")
+        logged = session.get("logged")
+        if not user_id or not logged:
+            flash("please log in to chat with someone!", "error")
+            return redirect("/login")
+        conn = db.connect()
+        curs = conn.cursor()
+
+        curs.execute("SELECT liked, was_liked FROM likes WHERE liked = %s AND was_liked = %s", [user_id, target_id])
+        row1 = curs.fetchall()
+        if not row1:
+            flash("you must like the person first to chat with them!", "error")
+            return redirect("/explore")
+        curs.execute("SELECT liked, was_liked FROM likes WHERE liked = %s AND was_liked = %s", [target_id, user_id])
+        row2 = curs.fetchall()
+        if not row2:
+            flash("you must be liked by the person first to chat with them!", "error")
+        flash("now you can talk your 'Person'!", "success")
+
+        return redirect("/explore")
+
+    @app.route("/chat", methods=["GET"])
+    def chat_page():
+        # print("here ")
+        user_id = session.get("user_id")
+        logged = session.get("logged")
+        if not user_id or not logged:
+            flash("please log in to chat with someone!", "error")
+            return redirect("/login")
+        conn = db.connect()
+        curs = conn.cursor()
+
+        user = db.get_user_data(user_id)
+        user = utils.get_user_full_pic_path("img", user)
+
+        curs.execute("SELECT distinct l1.liked, l1.was_liked FROM likes l1, likes l2 WHERE l1.was_liked = l2.liked and l1.liked=%s", [user_id])
+        likes = curs.fetchall()
+
+        friends = db.get_friends(likes)
+        friends = utils.get_users_full_pic_path("img", friends)
+        # print(friends)
+        return render_template("chat.html", user=user, name=user.get("name"), friends=friends)
+
+
+    @app.route("/chat/<user_id>", methods=["GET"])
+    def chat_with(user_id):
+        # print("here ")
+        user_id = session.get("user_id")
+        logged = session.get("logged")
+        if not user_id or not logged:
+            flash("please log in to chat with someone!", "error")
+            return redirect("/login")
+        conn = db.connect()
+        curs = conn.cursor()
+
+        user = db.get_user_data(user_id)
+        user = utils.get_user_full_pic_path("img", user)
+
+        curs.execute("SELECT distinct l1.liked, l1.was_liked FROM likes l1, likes l2 WHERE l1.was_liked = l2.liked and l1.liked=%s", [user_id])
+        likes = curs.fetchall()
+
+        friends = db.get_friends(likes)
+        friends = utils.get_users_full_pic_path("img", friends)
+        # print(friends)
+        return render_template("chat.html", user=user, name=user.get("name"), friends=friends)

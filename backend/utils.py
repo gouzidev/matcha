@@ -4,7 +4,7 @@ from flask import flash
 
 def verify_ext(name):
     name_parts = name.split(".")
-    allowed_exts = ["jpeg", "png", "jpg"]
+    allowed_exts = ["jpeg", "png", "jpg", "webp"]
     if name_parts[-1] not in allowed_exts:
         return False
     return True
@@ -37,7 +37,7 @@ def handle_img(app, user_id, profile_pic):
         profile_pic.save(full_profile_pic_path)
         return pic_name
     else:
-       flash("allowed image extensions: ['.jpeg', '.jpg', '.png']", "error")
+       flash("allowed image extensions: ['.jpeg', '.jpg', '.png', '.webp']", "error")
        return None
 
 def verify_form_data(name, email, passw, gender):

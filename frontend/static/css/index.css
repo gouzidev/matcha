@@ -1,6 +1,7 @@
 @import url('https://fonts.cdnfonts.com/css/helvetica-neue-55');
 /* 1. Use a more-intuitive box-sizing model */
-*, *::before, *::after {
+*,*::before,
+*::after {
     box-sizing: border-box;
 }
 
@@ -15,9 +16,8 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    /* 3. Add accessible line-height */
+    min-height: 100vh;
     line-height: 1.5;
-    /* 4. Improve text rendering */
     -webkit-font-smoothing: antialiased;
 }
 
@@ -182,11 +182,13 @@ main .hero .join-btn
     box-shadow: 4px 4px 0px 0px #1b2727;
     transition: 0.3s all;
     margin-top: 2%;
+    text-decoration: none;
+    color: #1b2727;
 }
 
 main .hero .join-btn:hover
 {
-    opacity: 0.95;
+    opacity: 0.9;
 }
 
 main .features
@@ -277,7 +279,6 @@ footer
     align-items: center;
     justify-content: space-between;
     padding: 25px;
-    margin-top: 150px;
     font-family: monospace;
 }
 
@@ -352,7 +353,7 @@ footer .footer-section .footer-social a, footer .footer-section .footer-brand
 .error
 {
     font-size: medium;
-    color: rgba(255, 0, 0, 0.458);
+    color: rgba(255, 0, 0, 0.675);
     font-weight: 600;
     width: 400px;
     min-height: 10px;

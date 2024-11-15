@@ -6,7 +6,7 @@
 {% block loggin %}
     {% if name %}
             <div class="nav-block">
-                <form class="nav-link" action="/profile" method="GET">
+                <form class="nav-link" action="/user" method="GET">
                     <button class="" type="submit">profile</button>
                 </form>
             <form class="nav-link bg-lightpink" action="/logout" method="POST">
@@ -30,7 +30,7 @@
             <p class="hero-text">We commited to helping singles find love every day and we are confident in our ability to do so.
                 <span class="brand">matcha</span> matches single women and men for lasting and fulfilling relationships.
             </p>
-            <button class="join-btn">Join Matcha Now!</button>
+            <a href="/explore" class="join-btn">Join Matcha Now!</a>
         </div>
     </div>
     <div class="features">

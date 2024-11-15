@@ -39,20 +39,6 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/chat", methods=["GET"])
-def show_chat_page():
-    if not session.get("logged"):
-        flash("please loggin to see your chat", "error")
-        return redirect("/login")
-    email = session.get("email")
-    name = session.get("name")
-    user_id = session.get("user_id")
-    users = db.get_users(user_id)
-    
-    if email and name:
-        return render_template("chat.html", users=users, email=email, name=name)
-    else:
-        return render_template("login.html")
 
 
 @app.route("/explore", methods=["GET"])
@@ -62,8 +48,6 @@ def explore():
     users = db.get_users(user_id)
     users = utils.get_users_full_pic_path("img", users)
     users.sort(key=lambda user: user['fame'], reverse=True)
-    users = utils.filter_users_data(users)
-    print(users)
     name = session.get("name")
     email = session.get("email")
     if name and email:

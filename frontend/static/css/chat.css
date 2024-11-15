@@ -1,0 +1,253 @@
+
+main
+{
+    height: 80vh;
+    width: 100%;
+}
+
+.chat-container
+{
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+}
+
+.chat-users-container
+{
+    border-right: 1px solid #47474786;
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+}
+
+.chat-container .logged-user-container
+{
+    height: 25%;
+    border-bottom: 1px solid #47474786;
+    display: flex;
+    align-items: center;
+}
+
+
+.chat-container .logged-user-container .logged-user
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    font-weight: 600;
+    font-family: "Montserrat", Arial;
+    gap: 15px;
+    padding-left: 25px;
+    font-size: 25px;
+}
+
+.chat-container .logged-user-drop-down-icon
+{
+    font-size: 20px;
+}
+
+.chat-container .chat-users
+{
+    height: 75%;
+    font-size: 18px;
+    font-weight: 500;
+    font-family: 'Helvetica Neue', sans-serif;
+}
+
+.chat-container .logged-user .logged-user-name
+{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.chat-container .logged-user img
+{
+    object-fit: cover;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    z-index: 1;
+    border: 3px solid rgb(0, 0, 0);
+}
+
+.chat-users
+{
+
+}
+
+ .chat-users-title
+{
+    font-weight: 500;
+    font-size: 20px;
+    margin: 15px;
+}
+
+
+.chat-item
+{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 70px;
+    width: 100%;
+    border-top: 1px solid #FEFEFE;
+    gap: 15px;
+    padding-left: 25px;
+    transition: 0.3s;
+}
+
+.chat-item:hover
+{
+    background: #f6f6f6;
+    cursor: pointer;
+    padding-left: 30px;
+}
+
+.chat-item .chat-user-img
+{
+    border-radius: 50%;
+    width: 50px;
+    height: 50px; 
+}
+
+.chat-item .chat-user-img img
+{
+    object-fit: cover;
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    border: 3px solid rgb(0, 0, 0);
+}
+
+.chat-users-container .user-name
+{
+    
+}
+
+.chat-user-img
+{
+
+}
+
+.chat-discussion
+{
+    width: 80%;
+    font-family: 'Helvetica Neue';
+    font-weight: 500;
+}
+
+.chat-discussion .chat-sender-container
+{
+    height: 20%;
+    width: 100%;
+}
+
+.chat-discussion .chat-sender-container .chat-sender
+{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    border-bottom: 1px solid #47474786;
+    gap: 20px;
+    padding: 20px;
+    transition: 0.3s;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-weight: 700;
+    
+
+}
+
+.chat-discussion .chat-sender-container .chat-sender .chat-sender-img
+{
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+}
+
+.chat-discussion .chat-sender-container .chat-sender img
+{
+    object-fit: cover;
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+
+.chat-container .chat-msgs-container
+{
+    height: 70%;
+    padding: 10px;
+    overflow: auto;
+
+}
+
+.chat-msgs
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.chat-msgs .chat-msg-container
+{
+    margin-top: 5px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.chat-msgs .chat-msg.left
+{
+    align-self: flex-start;
+    background-color: #7aff71;
+}
+
+.chat-msgs .chat-msg.right
+{
+    align-self: flex-end;
+    background-color: #71b3ff;
+}
+
+.chat-msgs .chat-msg
+{
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+
+.chat-msg-input-container
+{
+    height: 10%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    padding-left: 10px;
+    position: relative;
+}
+
+.chat-msg-input-container input
+{
+    border-radius: 20px;
+    padding-left: 15px;
+    width: 100%;
+    height: 100%;
+}
+
+.chat-msg-input-container button
+{
+    position: absolute;
+    font-weight: 600;
+    margin-right: 15px;
+}

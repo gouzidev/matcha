@@ -1,20 +1,20 @@
 {% extends "index.html" %}
 
 {% block title %}
-    Profile
+    User
 {% endblock %}
 
 {% block links %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/user.css') }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 {% endblock %}
 
 {% block content %}
     <main>
-        <div class="profile-form-wrapper">
+        <div class="user-form-wrapper">
             <h3 class="form-header">Update your info</h3>
-            <form class="profile-form" method="POST" action="/profile"  enctype="multipart/form-data" >
+            <form class="user-form" method="POST" action="/user"  enctype="multipart/form-data" >
                 <div class="form-group">
                     <div class="form-group-item">
                         <label class="form-label">        name:  </label>
@@ -60,11 +60,11 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="form-group-item">
+                    <div class="form-group-item gender-form-group">
                         <label class="form-label">
                             gender:
                         </label>
-                        <button type="button" class="form-input-edit-btn">edit</button>
+                        <button type="button" class="form-radio-edit-btn">edit</button>
                         <div class="radio-group">
                             <label for="male">male </label>   
                             <input {% if user.gender == 1%}checked{% endif %} disabled class="form-radio" name="gender" id="male" type="radio" value="1" />
@@ -78,53 +78,57 @@
                     </div>
                     <div class="form-group-item">
                         <label class="form-label">
-                            profile picture:
+                            user picture:
                         </label>
-                        {% if user.profile_pic %}
-                            <a href="/profile/picture/{{user.id}}" class="form-input-edit-btn show-img-btn">show</a>
-                             <div class="form-input-edit-btn show-delete-popup-btn">delete</div>
-                             {# <button type="button" class="form-input-edit-btn">show</button>
-                            <button type="button" class="form-input-edit-btn">delete</button> #}
+                        <div class="pic-btns">
+                          {% if user.profile_pic %}
+                            <a href="/user/picture/{{user.id}}" target="_blank" class="form-input-edit-btn profile-btn show-img-btn">show</a>
+                             <div class="form-input-edit-btn show-delete-popup-btn profile-btn">delete</div>
                             {% else %}
-                            <!-- <form class="add-img-form" method="POST" action="/profile/picture/{{user.id}}"> -->
-                            <!-- </form> -->
-                              <input type="file" value="add" name="profile_pic" class="form-input-edit-btn" placeholder="upload" alt="upload your profile picture"/>
+                              <input type="file" value="add" name="profile_pic" class="form-input-edit-btn show-img-btn" placeholder="upload" alt="upload your user picture"/>
                         {% endif %}
-                        
+                        </div>
                     </div>
+                </div>
+                <div class="form-item tags-form-group">
+                  <label class="form-label">        add a tag: </label>
+                  <div class="form-input-group">
+                    <input class="form-input tag-input" type="tag" name="tag" />
+                  </div>
+                  <div class="tags-wrapper">
+                    <div class="tags-container">
+                      {% if user.tags %}
+                      {% for tag in user.tags %}
+                          <div class="tag-item">
+                            <div class="tag-value" data-tag-id="{{tag.id}}" data-user-id="{{tag.user_id}}">
+                                {{tag.value}}
+                            </div>
+                            <div class="tag-delete-icon fa-solid fa-trash">
+                            </div>
+                          </div>
+                      {% endfor %}
+                      {% endif %}
+                    </div>
+                  </div>
                 </div>
                 <div class="msg">
-                    <div class="error">
-                        {% with messages = get_flashed_messages(with_categories=True) %}
-                            {% if messages %}
-                                {% for category, message in messages %}
-                                    {% if category == "error" %}
-                                        <div class="error-msg">* {{message}}</div>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                        {% endwith %}
-                    </div>
-                    <div class="success">
-                        {% with messages = get_flashed_messages(with_categories=True) %}
-                            {% if messages %}
-                                {% for category, message in messages %}
-                                    {% if category == "success" %}
-                                        <div class="success-msg">* {{message}}</div>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                        {% endwith %}
-                    </div>
+                  {% with messages = get_flashed_messages(with_categories=True) %}
+                      {% if messages %}
+                          <div class="{{messages[-1][0]}}">
+                          {% set last_message = messages[-1][1] %}
+                            <div class="{{messages[-1][0]}}-msg"> {{ last_message }}</div>
+                          </div>
+                        {% endif %}
+                  {% endwith %}
                 </div>
-                <input type="submit" class="profile-save-btn" value="SAVE INFO"/>
+                <input type="submit" class="user-save-btn" value="SAVE INFO"/>
             </form>
             <div class="popup-modal">
                 <div class="delete-picture-popup">
-                  <div class="delete-confirm-text">are you sure you want to delete your profile picture, this action is irreversible </div>
+                  <div class="delete-confirm-text">are you sure you want to delete your user picture, this action is irreversible </div>
                   <div class="popup-btns">
-                    <button type="submit" class="delete-profile-pic-confirm-btn">confirm</button>
-                    <button type="reset" class="cancel-delete-profile-pic-btn">cancel</button>
+                    <button type="submit" class="delete-user-pic-confirm-btn">confirm</button>
+                    <button type="reset" class="cancel-delete-user-pic-btn">cancel</button>
                   </div>
                 </div>
             </div>
@@ -135,7 +139,7 @@
         <script>
             const user = {{ user | tojson }};
         </script>
-        <script src="js/profile.js"></script>
+        <script src="js/user.js"></script>
         <script src="js/index.js"></script>
     {% endblock %}
 {% endblock %}

@@ -3,11 +3,103 @@
     Chat
 {% endblock %} 
 
-{% block content %}
-    <div class="chat-section">
-        {% for user in users %}
+{% block links %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}" />
+  <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://fonts.cdnfonts.com/css/helvetica-neue-5" rel="stylesheet">
+{% endblock %}
 
-            <div class="chat-user">{{user[1]}}</div>
-        {% endfor %}
-    </div>
+
+{% block content %}
+    <main class="chat-section">
+      <div class="chat-container">
+
+        <div class="chat-users-container">
+          <div class="logged-user-container">
+            <div class="logged-user">
+              <img src="http:///127.0.0.1:5000/{{user.profile_pic}}"/>
+              <div class="logged-user-name">
+                {{user.name}}
+                <div class="logged-user-drop-down-icon fa-solid fa-caret-down"></div>
+              </div>
+            </div>
+          </div>
+          <div class="chat-users">
+            <div class="chat-users-title">
+              Messages:
+            </div>
+            {% if friends %}
+              {% for friend in friends %}
+                  <div class="chat-item">
+                    <div class="chat-user-img">
+                      <img src="http:///127.0.0.1:5000/{{friend.profile_pic}}"/>
+                    </div>
+                    <div class="chat-user-name">
+                      {{friend.name}}
+                    </div>
+                  </div>
+              {% endfor %}
+            {% else %}
+                  
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="chat-discussion">
+          <div class="chat-sender-container">
+            <div class="chat-sender">
+              <div class="chat-sender-img">
+                <img src="http:///127.0.0.1:5000/img/28/pewds.jpg"/>
+              </div>
+              <div class="chat-sender-name">
+                jhon
+              </div>
+            </div>
+          </div>
+          <div class="chat-msgs-container">
+            <div class="chat-msgs">
+              <div class="chat-msg-container">
+                <div class="chat-msg right">
+                    hello salah what's popping !?
+                </div>
+              </div>
+              <div class="chat-msg-container">
+                <div class="chat-msg left">
+                    nothing much how about you jhon ?
+                </div>
+              </div>
+              <div class="chat-msg-container">
+                <div class="chat-msg right">
+                    we are going to come tonight
+                </div>
+              </div>
+              <div class="chat-msg-container">
+                <div class="chat-msg right">
+                      got any plans ?
+                </div>
+              </div>
+              <div class="chat-msg-container">
+                <div class="chat-msg left">
+                      sure mate ! 
+                </div>
+              </div>
+              <div class="chat-msg-container">
+                <div class="chat-msg left">
+                      see you soon ! 
+                </div>
+              </div>
+            </div>
+          </div>
+          <form action="/chat/" method="POST" class="chat-msg-input-container">
+            <input class="chat-msg-input" placeholder="type a message" />
+            <button type="" value="send">send</button>
+          </form>
+        </div>
+      </div>
+    </main>
 {% endblock %}

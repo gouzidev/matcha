@@ -1,9 +1,9 @@
 main.explore
 {
-    margin-top: 50px;
     display: flex;
     width: 100%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 }
@@ -26,6 +26,8 @@ main.explore
     border-radius: 4%;
     display: flex;
     justify-content: center ;
+    box-shadow: rgba(10, 10, 10, 0.559) 0px 1px 8px 1px;
+
 }
 
 .card-layer
@@ -67,13 +69,16 @@ main.explore
 .name-age-group
 {
     display: flex;
-    width: 50%;
+    width: 70%;
 }
-.user-name
-{
+.user-name {
     font-family: "Quicksand";
     font-weight: 700;
     font-size: 50px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%; /* Ensures the name doesn't exceed its container's width */
 }
 .user-age
 {
@@ -98,7 +103,6 @@ main.explore
 
 .user-bio
 {
-    text-align: center;
 }
 .active-use-icon
 {
@@ -111,4 +115,63 @@ main.explore
 .card-btns
 {
     display: flex;
+    font-size: 30px;
+    align-items: center;
+    justify-content: space-around;
+    background: linear-gradient(to top, black , rgba(0, 0, 0, 0));
+    height: 30%;
+}
+
+.card-btn 
+{
+    transition: 0.4s inherit;
+    cursor: pointer;
+}
+
+.card-heart-btn
+{
+    color: #f1a3a3;
+}
+
+.card-chat-btn
+{
+    color: #FFF5BF;
+}
+
+.card-chat-btn:hover
+{
+    rotate: 3deg;
+}
+
+.card-heart-btn:hover
+{
+    fill: #f1a3a3;
+    rotate: -3deg;
+}
+
+.card-btn:hover
+{
+    font-size: 32px;
+}
+
+.msg
+{
+    font-family: monospace;
+    height: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    text-align: center;
+}
+.msg .error
+{
+    width: 100%;
+}
+
+.msg .error-msg, .msg .success-msg
+{
+    font-size: 20px;
+
 }
