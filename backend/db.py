@@ -84,9 +84,39 @@ def get_friends(likes):
         friends.append(friend)
     return friends
 
+def check_users_friends(user1_id, user2_id):
+    conn = connect()
+    curs = conn.cursor()
+    
+    curs.execute("select id from likes where liked = %s and was_liked = %s", [user1_id, user2_id])
+    row1 = curs.fetchone()
+    if not row1: return False
+    curs.execute("select id from likes where liked = %s and was_liked = %s", [user2_id, user1_id])
+    row2 = curs.fetchone()
+    if not row2: return False
+    return True
+
 def check_user_exists(fieldname, fielddata):
     conn = connect()
     curs = conn.cursor()
     curs.execute(f"SELECT {fieldname} from users where {fieldname} = %s", [fielddata])
     row = curs.fetchone()
     return not not row
+
+def get_discussion(user1_id, user2_id):
+    conn = connect()
+    curs = conn.cursor()
+    # select * from messages where (sender = 22 and receiver = 30) or (sender = 30 and receiver = 22) order by date_sent ;
+    curs.execute("select id, content, sender, receiver, DATE(date_sent) as date, TIME(date_sent) as time from messages where (sender = %s and receiver = %s) or (sender = %s and receiver = %s) order by date_sent;", [user1_id, user2_id, user2_id, user1_id])
+    rows = curs.fetchall()
+    msgs = []
+    for row in rows:
+        msg = {}
+        msg["id"] = row[0]
+        msg["content"] = row[1]
+        msg["sender"] = row[2]
+        msg["receiver"] = row[3]
+        msg["date"] = row[4]
+        msg["time"] = row[5]
+        msgs.append(msg)
+    return msgs

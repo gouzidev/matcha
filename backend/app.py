@@ -5,7 +5,8 @@ from flask import render_template, redirect
 import db, utils
 from flask_bcrypt import Bcrypt
 import auth
-import user as user
+import chat
+import user
 
 app = Flask(__name__, static_folder="../frontend/static",
              template_folder="../frontend/html", 
@@ -20,6 +21,8 @@ bcrypt = Bcrypt(app)
 auth.init_auth(app)
 
 user.init_user(app)
+
+chat.init_chat(app)
 
 @app.template_filter("first_4_words")
 def first_4_words(s):
